@@ -13,12 +13,14 @@ import { RevenueChart } from "./components/RevenueChart";
 import { ChurnChart } from "./components/ChurnChart";
 import { SubscriptionHistory } from "./components/SubscriptionHistory";
 import { useUsers } from "../Users/apis/useUser";
+import { usePlatformStats, type PlatformStats } from "@/components/hooks/useAdminStats";
 
 
 export const SubscriptionBillings = () => {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const { data: platformStats } = usePlatformStats();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -37,6 +39,12 @@ export const SubscriptionBillings = () => {
   const users = data?.users || [];
   const totalPages = data?.totalPages || 1;
   const totalUsers = data?.total || 0;
+const stats: PlatformStats = platformStats?.stats || platformStats || {};
+
+// 2. Extract the Global Churn Rate for your top-level metric card
+const globalChurnRate = stats.churnRate || 0;
+const plans = stats.planSubscriptionStats || [];
+
 
   const columns: ColumnDef<any>[] = [
     {
@@ -91,7 +99,7 @@ export const SubscriptionBillings = () => {
       render: (user) => {
         // Fallback to 0 if no specific amount is attached to the user plan yet
         const amount = Number(user.planPrice || user.amount) || 0;
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'NGN' }).format(amount);
       }
     },
     {
@@ -200,7 +208,7 @@ export const SubscriptionBillings = () => {
 
         {/* Right Column (Takes up 1/3 of space) */}
         <div className="lg:col-span-1 flex flex-col gap-6">
-          <ChurnChart />
+          <ChurnChart churnRate={globalChurnRate} plans={plans}/>
           <SubscriptionHistory />
         </div>
 

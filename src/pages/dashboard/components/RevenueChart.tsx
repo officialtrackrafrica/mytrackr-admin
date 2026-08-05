@@ -22,12 +22,12 @@ export const RevenueChart = () => {
           <h3 className="font-bold text-slate-900 text-sm">Monthly Recurring Revenue</h3>
           <div className="flex items-center gap-2 mt-1">
             <h2 className="text-2xl font-bold text-slate-900">
-              {isLoading ? "..." : `$${data?.totalRevenue ? (data.totalRevenue / 1000).toFixed(1) + "k" : "0.0k"}`}
+              {isLoading ? "..." : ` ₦${data?.totalRevenue ? (data.totalRevenue / 1000).toFixed(1) + "k" : "0.0k"}`}
             </h2>
-            <span className="text-xs font-medium text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center">
+            {/* <span className="text-xs font-medium text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center">
               {data?.growthPercentage || "+0%"}
             </span>
-            <span className="text-xs text-slate-400">VS LAST YEAR</span>
+            <span className="text-xs text-slate-400">VS LAST YEAR</span> */}
           </div>
         </div>
         <Button variant="outline" className="h-8 text-xs text-[#475467]">

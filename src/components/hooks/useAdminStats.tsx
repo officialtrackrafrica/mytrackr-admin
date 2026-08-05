@@ -1,6 +1,34 @@
 import { api } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 
+export interface PlanSubscriptionStat {
+  planId: string;
+  planName: string;
+  planSlug: string;
+  interval: string;
+  currency: string;
+  price: number;
+  totalSubscriptions: number;
+  activeSubscriptions: number;
+  pendingSubscriptions: number;
+  canceledSubscriptions: number;
+  failedSubscriptions: number;
+  recurringRevenue: number;
+  churnRate: number;
+}
+
+export interface PlatformStats {
+  totalUsers: number;
+  activeUsers: number;
+  inactiveUsers: number;
+  activeSubscriptions: number;
+  recurringRevenue: number;
+  realizedSubscriptionRevenue: number;
+  churnRate: number; // 👉 Global Churn Rate
+  planSubscriptionStats: PlanSubscriptionStat[]; // 👉 Per-Plan Data
+  // ... any other fields you need
+}
+
 // 1. Overview stats (/admin/stats)
 export const fetchAdminStats = async () => {
   const response = await api.get("/admin/stats");

@@ -3,10 +3,11 @@ import { useState } from 'react';
 import { Calendar, DocumentDownload, ArrowUp, ArrowDown} from 'iconsax-react';
 import { 
   ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip,
-  PieChart, Pie, Cell, BarChart, Bar
+ BarChart, Bar
 } from 'recharts';
 import { AdminLayout } from '@/components/layout/AdminLayout';
-import { useAdminStats, useFinancialSummary, usePlatformStats, useRegistrationTrends } from '@/components/hooks/useAdminStats';
+import { useAdminStats, useFinancialSummary, usePlatformStats, useRegistrationTrends, type PlatformStats } from '@/components/hooks/useAdminStats';
+import { ChurnChart } from '../Subscriptions/components/ChurnChart';
 
 
 export const DashboardHome = () => {
@@ -59,11 +60,29 @@ const { data: adminStats, isLoading: isAdminLoading } = useAdminStats();
   const currentRevenue = financialData?.data?.[0]?.credits 
     ? Number(financialData.data[0].credits) 
     : 0;
+const stats: PlatformStats = platformStats?.stats || platformStats || {};
 
-  const churnData = financialData?.churnBreakdown || [
-    { name: 'Retained', value: 86.48, color: '#2563eb' },
-    { name: 'Lost', value: 25.42, color: '#0f172a' },
-  ];
+// 2. Extract the Global Churn Rate for your top-level metric card
+const globalChurnRate = stats.churnRate || 0;
+
+// 3. Extract the array of plans to display individual churn rates
+const plans = stats.planSubscriptionStats || [];
+ // 👉 1. Make the Global Pie Chart Dynamic (if you keep it)
+
+  // 👉 2. Map real API data to the Subscriptions Breakdown
+  const totalActiveSubs = stats.activeSubscriptions || 1; // Prevent division by zero
+  const subscriptionBreakdown = plans
+    .map((plan: any, index: number) => {
+      const colors = ['bg-blue-600', 'bg-indigo-500', 'bg-emerald-500', 'bg-amber-500', 'bg-rose-500', 'bg-slate-400'];
+      const percent = ((plan.activeSubscriptions / totalActiveSubs) * 100).toFixed(0);
+      return {
+        name: plan.planName,
+        value: plan.activeSubscriptions.toString(),
+        percent: `${percent}%`,
+        color: colors[index % colors.length], // Assigns a color sequentially
+      };
+    })
+    .sort((a, b) => Number(b.value) - Number(a.value)); // Sort highest to lowest
 
   // 👉 Map API data to the Signups Chart
   const signupsData = registrationData?.data
@@ -88,14 +107,7 @@ const { data: adminStats, isLoading: isAdminLoading } = useAdminStats();
       })
     : [];
 
-  const subscriptionBreakdown = platformStats?.subscriptionBreakdown || [
-    { name: 'All', value: '0', percent: '100%', color: 'bg-blue-600' },
-    { name: 'Unlimited', value: '0', percent: '0%', color: 'bg-slate-400' },
-    { name: 'Duo', value: '0', percent: '0%', color: 'bg-slate-400' },
-    { name: 'Solo', value: '0', percent: '0%', color: 'bg-slate-400' },
-    { name: 'Web', value: '0', percent: '0%', color: 'bg-slate-400' },
-    { name: 'Starter', value: '0', percent: '0%', color: 'bg-slate-400' },
-  ];
+
 
   return (
     <AdminLayout>
@@ -148,11 +160,11 @@ const { data: adminStats, isLoading: isAdminLoading } = useAdminStats();
                 <span className="text-xl font-bold text-slate-900">
                  {isFinancialLoading 
             ? "..." 
-            : "$" + Intl.NumberFormat('en-US', { notation: "compact", maximumFractionDigits: 1 }).format(currentRevenue)}
+            : "₦" + Intl.NumberFormat('en-US', { notation: "compact", maximumFractionDigits: 1 }).format(currentRevenue)}
         </span>
-                <span className="text-xs font-medium text-emerald-600 flex items-center bg-emerald-50 px-1.5 py-0.5 rounded">
+                {/* <span className="text-xs font-medium text-emerald-600 flex items-center bg-emerald-50 px-1.5 py-0.5 rounded">
                   <ArrowUp size="12" color="#059669" className="mr-1" /> {financialData?.growthPercentage || "0%"} VS LAST YEAR
-                </span>
+                </span> */}
               </div>
             </div>
             <button className="flex items-center gap-2 px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50">
@@ -172,39 +184,8 @@ const { data: adminStats, isLoading: isAdminLoading } = useAdminStats();
           </div>
         </div>
 
-        {/* Churn Rate (Spans 1 column) */}
-        <div className="bg-white p-6 rounded-xl border border-slate-200 flex flex-col">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-bold text-slate-900">Churn rate</h3>
-            <select className="text-xs font-medium text-slate-500 bg-transparent outline-none cursor-pointer">
-              <option>Last week</option>
-            </select>
-          </div>
-          <div className="flex-1 flex flex-col items-center justify-center relative min-h-[250px]">
-             <ResponsiveContainer width="100%" height={160}>
-              <PieChart>
-                <Pie data={churnData} innerRadius={50} outerRadius={80} paddingAngle={2} dataKey="value" stroke="none">
-                  {churnData.map((entry: any, index: number) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <RechartsTooltip />
-              </PieChart>
-            </ResponsiveContainer>
-            {/* Custom Legend */}
-            <div className="flex flex-col gap-3 mt-4 w-full px-4">
-              {churnData.map((item: any, i: number) => (
-                <div key={i} className="flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                    <span className="text-slate-500">{item.name} customers</span>
-                  </div>
-                  <span className="font-bold text-slate-900">{item.value}%</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+       {/* Updated Churn Rate Card (Spans 1 column) */}
+        <ChurnChart churnRate={globalChurnRate} plans={plans}/>
 
       </div>
 

@@ -1,6 +1,6 @@
 import { useFinancialSummary } from "@/components/hooks/useAdminStats";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-import { DocumentDownload, ArrowUp } from "iconsax-react";
+import { DocumentDownload } from "iconsax-react";
 import { Button } from "@/components/ui/button";
 
 export const RevenueChart = () => {
@@ -34,12 +34,12 @@ export const RevenueChart = () => {
             <h2 className="text-2xl font-bold text-slate-900">
               {isLoading 
                 ? "..." 
-                : "$" + Intl.NumberFormat('en-US', { notation: "compact", maximumFractionDigits: 1 }).format(currentRevenue)}
+                : "₦" + Intl.NumberFormat('en-US', { notation: "compact", maximumFractionDigits: 1 }).format(currentRevenue)}
             </h2>
-            <span className="text-xs font-medium text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center">
+            {/* <span className="text-xs font-medium text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center">
                <ArrowUp size="12" color="#10B981" className="mr-1" /> {financialData?.growthPercentage || "0%"}
             </span>
-            <span className="text-xs text-slate-400">VS LAST YEAR</span>
+            <span className="text-xs text-slate-400">VS LAST YEAR</span> */}
           </div>
         </div>
         <Button variant="outline" className="h-8 text-xs text-[#475467]">

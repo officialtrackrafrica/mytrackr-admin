@@ -89,7 +89,7 @@ const { mutate: changeUserStatus } = useUpdateUserStatus();
             key: 'plan',
             label: 'Plan',
             cellClassName: 'text-slate-600 text-sm capitalize',
-            render: (user) => user.planType || 'None'
+            render: (user) => user.plan?.name || 'None'
         },
         {
             key: 'transactions',
