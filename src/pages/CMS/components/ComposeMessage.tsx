@@ -16,7 +16,6 @@ export const ComposeMessage = () => {
   //  Updated state
   const [recipientGroup, setRecipientGroup] = useState("all_users");
   const [explicitRecipients, setExplicitRecipients] = useState("");
-  const [recipients, setRecipients] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
 

@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Home, User, CardPos, DocumentText, MessageQuestion, Element3, Setting2, Logout, Folder2, ArrowUp2, ArrowDown2 } from "iconsax-react";
+import { Home, User, CardPos, MessageQuestion, Element3, Setting2, Logout, Folder2, ArrowUp2, ArrowDown2 } from "iconsax-react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/Logowhite.svg"
 

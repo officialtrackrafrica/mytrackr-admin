@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"; 
 import { Toaster } from "sonner";
 import { Login } from "./pages/auth/Login";
-import { AdminLayout } from "./components/layout/AdminLayout";
 import { DashboardHome } from "./pages/dashboard/DashboardHome";
 import { UserManagement } from "./pages/Users/UserManagement";
 import { UserDetails } from "./pages/Users/UserDetails";

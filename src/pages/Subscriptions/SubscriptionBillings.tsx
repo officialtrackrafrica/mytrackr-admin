@@ -12,20 +12,8 @@ import { MetricsCards } from "./components/MetricsCards";
 import { RevenueChart } from "./components/RevenueChart";
 import { ChurnChart } from "./components/ChurnChart";
 import { SubscriptionHistory } from "./components/SubscriptionHistory";
-import { useTransactions } from "@/components/hooks/useTransactions";
 import { useUsers } from "../Users/apis/useUser";
 
-// Mock Data for the table visually matching the design
-const mockBillingData = [
-  { id: 1, name: "Olivia Rhye", email: "olivia@untitledui.com", date: "Wed 1:00pm", plan: "Starter", amount: "500", status: "Active" },
-  { id: 2, name: "Olivia Jane", email: "olivia@untitledui.com", date: "Wed 7:20am", plan: "Solo", amount: "80", status: "Active" },
-  { id: 3, name: "Jane Doe", email: "doe@untitledui.com", date: "Wed 2:45am", plan: "Duo", amount: "1,239", status: "Active" },
-  { id: 4, name: "Olivia Jane", email: "olivia@untitledui.com", date: "Tue 6:10pm", plan: "Unlimited", amount: "+ $88.00", status: "Active" },
-  { id: 5, name: "Olivia Jane", email: "olivia@untitledui.com", date: "Tue 7:52am", plan: "Solo", amount: "- $12.50", status: "Cancelled" },
-  { id: 6, name: "Olivia Jane", email: "olivia@untitledui.com", date: "Tue 12:15pm", plan: "Solo", amount: "- $40.20", status: "Due" },
-  { id: 7, name: "Olivia Jane", email: "olivia@untitledui.com", date: "Tue 5:40am", plan: "Solo", amount: "+ $88.00", status: "Active" },
-  { id: 8, name: "Olivia Jane", email: "olivia@untitledui.com", date: "Tue 5:40am", plan: "Solo", amount: "+ $88.00", status: "Cancelled" },
-];
 
 export const SubscriptionBillings = () => {
   const [search, setSearch] = useState("");

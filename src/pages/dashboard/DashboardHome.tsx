@@ -1,6 +1,6 @@
 // src/pages/dashboard/DashboardHome.tsx
 import { useState } from 'react';
-import { Calendar, DocumentDownload, ArrowUp, ArrowDown, Profile2User, Card, Receipt1, Activity } from 'iconsax-react';
+import { Calendar, DocumentDownload, ArrowUp, ArrowDown} from 'iconsax-react';
 import { 
   ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip,
   PieChart, Pie, Cell, BarChart, Bar
@@ -22,7 +22,7 @@ export const DashboardHome = () => {
 const { data: adminStats, isLoading: isAdminLoading } = useAdminStats();
   const { data: platformStats, isLoading: isPlatformLoading } = usePlatformStats();
   const { data: financialData, isLoading: isFinancialLoading } = useFinancialSummary();
-  const { data: registrationData, isLoading: isRegistrationLoading } = useRegistrationTrends(apiPeriod);
+  const { data: registrationData } = useRegistrationTrends(apiPeriod);
 
   // 2. Map API data to the Metrics Grid (with safe fallbacks)
   const metrics = [

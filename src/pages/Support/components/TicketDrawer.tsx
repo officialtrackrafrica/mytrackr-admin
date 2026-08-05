@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Drawer } from "@/components/ui/drawer";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Paperclip2, EmojiNormal, Send2, DocumentText } from "iconsax-react";
+import { Paperclip2, EmojiNormal, Send2 } from "iconsax-react";
 import { Input } from "@/components/ui/input";
 import { useTicketDetails, useReplyToTicket, useUpdateTicketStatus } from "../apis/useSupport";
 import { toast } from "sonner";

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SearchNormal, Add, Trash, Sms } from "iconsax-react";
+import { SearchNormal, Add, Trash } from "iconsax-react";
 import { useMessages, useTrashMessage, type GetMessagesParams } from "./apis/useMessages";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 
 
@@ -45,7 +45,7 @@ export const EmailsNotifications = () => {
     limit: 10,
   });
 
-  const { mutateAsync: trashMessage, isPending: isTrashing } = useTrashMessage();
+  const { mutateAsync: _trashMessage, isPending: isTrashing } = useTrashMessage();
 
   const messages = data?.messages || data?.data || [];
   const totalPages = data?.totalPages || 1;
@@ -67,16 +67,16 @@ export const EmailsNotifications = () => {
     }
   };
 
-  const handleBulkDelete = async () => {
-    try {
-      // Execute trash mutations concurrently for selected items
-      await Promise.all(selectedItems.map(id => trashMessage(id)));
-      toast.success(`${selectedItems.length} messages moved to trash.`);
-      setSelectedItems([]);
-    } catch (error) {
-      toast.error("Failed to delete some messages.");
-    }
-  };
+//   const handleBulkDelete = async () => {
+//     try {
+//       // Execute trash mutations concurrently for selected items
+//       await Promise.all(selectedItems.map(id => trashMessage(id)));
+//       toast.success(`${selectedItems.length} messages moved to trash.`);
+//       setSelectedItems([]);
+//     } catch (error) {
+//       toast.error("Failed to delete some messages.");
+//     }
+//   };
 
  const pageActions = (
     <Button  className="bg-[#135ED6] hover:bg-[#0F4BAB] text-white">

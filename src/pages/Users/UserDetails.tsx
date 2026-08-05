@@ -166,7 +166,7 @@ export const UserDetails = () => {
               <Select 
                 disabled={!isEditing} 
                 value={formData.businessType} 
-                onValueChange={(val) => setFormData({ ...formData, businessType: val })}
+                onValueChange={(val) => setFormData({ ...formData, businessType: val || '' })}
               >
                 <SelectTrigger className="bg-slate-50/50 disabled:opacity-80">
                   <SelectValue placeholder="Select business type" />
