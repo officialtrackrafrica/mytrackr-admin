@@ -96,3 +96,13 @@ export const useUpdateUserStatus = () => {
     },
   });
 };
+
+
+export const useResetUserPassword = () => {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const response = await api.post(`/admin/users/${id}/reset-password`);
+      return response.data;
+    },
+  });
+};

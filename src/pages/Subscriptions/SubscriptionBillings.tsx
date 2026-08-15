@@ -92,16 +92,16 @@ const plans = stats.planSubscriptionStats || [];
       cellClassName: 'font-medium text-slate-900 text-sm capitalize',
       render: (user) => user.plan?.name || user.planType || 'None'
     },
-    { 
-      key: 'amount', 
-      label: 'Amount', 
-      cellClassName: 'text-[#475467] text-sm',
-      render: (user) => {
-        // Fallback to 0 if no specific amount is attached to the user plan yet
-        const amount = Number(user.planPrice || user.amount) || 0;
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'NGN' }).format(amount);
-      }
-    },
+    // { 
+    //   key: 'amount', 
+    //   label: 'Amount', 
+    //   cellClassName: 'text-[#475467] text-sm',
+    //   render: (user) => {
+    //     // Fallback to 0 if no specific amount is attached to the user plan yet
+    //     const amount = Number(user.planPrice || user.amount) || 0;
+    //     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'NGN' }).format(amount);
+    //   }
+    // },
     {
       key: 'status',
       label: 'Status',
@@ -135,17 +135,17 @@ const plans = stats.planSubscriptionStats || [];
     }
   ];
 
-  const pageActions = (
-    <Button className="bg-[#135ED6] hover:bg-[#0F4BAB] text-white">
-      Manage Plan
-    </Button>
-  );
+  // const pageActions = (
+  //   <Button className="bg-[#135ED6] hover:bg-[#0F4BAB] text-white">
+  //     Manage Plan
+  //   </Button>
+  // );
 
   return (
     <AdminLayout 
       title="Subscription and Billings" 
       subtitle="Keep track of user subscriptions, churn rate, and your revenue."
-      headerActions={pageActions}
+      // headerActions={pageActions}
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         

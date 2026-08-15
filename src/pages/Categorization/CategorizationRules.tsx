@@ -148,7 +148,8 @@ useEffect(() => {
                 <div key={ruleId} className="px-6 py-4 flex items-center gap-8 hover:bg-slate-50/30 transition-colors">
                   {/* Category Name */}
                   <div className="w-48 shrink-0">
-                    <span className="text-sm font-medium text-slate-900 capitalize">{rule.category || rule.name}</span>
+                    {/* <span className="text-sm font-medium text-slate-900 capitalize">{rule.category || rule.name}</span> */}
+                    {[rule.category, rule.subCategory].filter(Boolean).join(' / ') || rule.name}
                   </div>
 
                   {/* Keywords Input Area */}

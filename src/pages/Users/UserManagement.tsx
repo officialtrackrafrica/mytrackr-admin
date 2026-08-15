@@ -7,7 +7,7 @@ import { PaginationBar } from "@/components/ui/PaginationBar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { DataTable, type ColumnDef } from "@/components/ui/DataTable";
-import { useUpdateUserStatus, useUsers } from "./apis/useUser";
+import { useResetUserPassword, useUpdateUserStatus, useUsers } from "./apis/useUser";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { SortFilterModal } from "./components/SortFilterModal";
@@ -19,6 +19,7 @@ export const UserManagement = () => {
     const [debouncedSearch, setDebouncedSearch] = useState("");
 const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
+  const [resettingUserId, setResettingUserId] = useState<string | null>(null);
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedSearch(search);
@@ -39,6 +40,7 @@ const [isFilterOpen, setIsFilterOpen] = useState(false);
     const totalPages = data?.totalPages || 1;
     const totalUsers = data?.total || 0;
 const { mutate: changeUserStatus } = useUpdateUserStatus();
+const { mutate: resetPassword } = useResetUserPassword();
 
   //  3. Create a helper function for the click handler
   const handleStatusChange = (id: string, currentStatus: string) => {
@@ -52,6 +54,20 @@ const { mutate: changeUserStatus } = useUpdateUserStatus();
       }
     );
   };
+  const handleResetPassword = (id: string) => {
+        setResettingUserId(id);
+        resetPassword(id, {
+            onSuccess: () => {
+                toast.success("Password reset initiated successfully.");
+            },
+            onError: () => {
+                toast.error("Failed to initiate password reset.");
+            },
+            onSettled: () => {
+                setResettingUserId(null);
+            }
+        });
+    };
     //  1. Define Columns once
     const columns: ColumnDef<any>[] = [
         {
@@ -108,11 +124,22 @@ const { mutate: changeUserStatus } = useUpdateUserStatus();
             label: 'Actions',
             headerClassName: 'text-right pr-6',
             cellClassName: 'text-right pr-6',
-            render: (item: any) => (
+            render: (item: any) => {
+                const userId = item.id || item._id;
+                const isResetting = resettingUserId === userId;
+                return (
                 <div className="flex items-center justify-end gap-3">
-                    <button className="text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3 py-1 rounded-full transition-colors">
-                        Reset password
-                    </button>
+                    <button 
+                            onClick={() => handleResetPassword(userId)}
+                            disabled={isResetting}
+                            className={`text-xs font-medium px-3 py-1 rounded-full transition-colors ${
+                                isResetting 
+                                ? 'text-slate-500 bg-slate-100 cursor-not-allowed' 
+                                : 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100'
+                            }`}
+                        >
+                            {isResetting ? 'Resetting...' : 'Reset password'}
+                        </button>
                     <DropdownMenu>
                         <DropdownMenuTrigger className="p-1 hover:bg-slate-100 rounded text-slate-400 transition-colors outline-none cursor-pointer flex items-center justify-center">
                             <More size="18" className="rotate-90" color="#1A1A1A" />
@@ -134,7 +161,8 @@ const { mutate: changeUserStatus } = useUpdateUserStatus();
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-            )
+                )
+            }
         }
     ];
 

@@ -29,54 +29,62 @@ export interface PlatformStats {
   // ... any other fields you need
 }
 
+export interface DateRangeParams {
+  startDate?: string;
+  endDate?: string;
+  period?: string; 
+  [key: string]: any; // Catch-all for any other filter params
+}
+
 // 1. Overview stats (/admin/stats)
-export const fetchAdminStats = async () => {
-  const response = await api.get("/admin/stats");
+export const fetchAdminStats = async (params?: DateRangeParams) => {
+  const response = await api.get("/admin/stats", { params });
   return response.data;
 };
 
-export const useAdminStats = () => {
+export const useAdminStats = (params?: DateRangeParams) => {
   return useQuery({
-    queryKey: ["admin-stats"],
-    queryFn: fetchAdminStats,
+    queryKey: ["admin-stats", params], 
+    queryFn: () => fetchAdminStats(params),
   });
 };
 
 // 2. Platform & Subscription stats (/admin/platform-stats)
-export const fetchPlatformStats = async () => {
-  const response = await api.get("/admin/platform-stats");
+export const fetchPlatformStats = async (params?: DateRangeParams) => {
+  const response = await api.get("/admin/platform-stats", { params });
   return response.data;
 };
 
-export const usePlatformStats = () => {
+export const usePlatformStats = (params?: DateRangeParams) => {
   return useQuery({
-    queryKey: ["platform-stats"],
-    queryFn: fetchPlatformStats,
+    queryKey: ["platform-stats", params], // 👉 Added params to queryKey
+    queryFn: () => fetchPlatformStats(params),
   });
 };
 
 // 3. Registration Trends (/admin/registrations)
-export const fetchRegistrationTrends = async (period?: string) => {
-  const response = await api.get("/admin/registrations", { params: { period } });
+export const fetchRegistrationTrends = async (params?: DateRangeParams) => {
+  const response = await api.get("/admin/registrations", { params });
   return response.data;
 };
 
-export const useRegistrationTrends = (period?: string) => {
+export const useRegistrationTrends = (params?: DateRangeParams) => {
   return useQuery({
-    queryKey: ["registration-trends", period],
-    queryFn: () => fetchRegistrationTrends(period),
+    queryKey: ["registration-trends", params], // 👉 Added params to queryKey
+    queryFn: () => fetchRegistrationTrends(params),
   });
 };
 
 // 4. Financial Summary Report (/admin/reports/financial-summary)
-export const fetchFinancialSummary = async () => {
-  const response = await api.get("/admin/reports/financial-summary");
+export const fetchFinancialSummary = async (params?: DateRangeParams) => {
+  const response = await api.get("/admin/reports/financial-summary", { params });
   return response.data;
 };
 
-export const useFinancialSummary = () => {
+export const useFinancialSummary = (params?: DateRangeParams) => {
   return useQuery({
-    queryKey: ["financial-summary"],
-    queryFn: fetchFinancialSummary,
+    queryKey: ["financial-summary", params], // 👉 Added params to queryKey
+    queryFn: () => fetchFinancialSummary(params),
   });
 };
+

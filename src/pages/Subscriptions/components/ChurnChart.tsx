@@ -23,7 +23,7 @@ export const ChurnChart = ({ churnRate = 0, plans = [] }: ChurnChartProps) => {
   ];
 
   return (
-    <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col h-full min-h-[420px]">
+    <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col min-h-[420px]">
       <div className="flex items-center justify-between mb-4 shrink-0">
         <h3 className="font-bold text-slate-900">Churn rate</h3>
         {/* <Select defaultValue="last-month">

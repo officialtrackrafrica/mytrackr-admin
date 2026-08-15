@@ -87,7 +87,7 @@ export const AdminLayout = ({
           <Link to="/dashboard/categorization" className={`flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-[#135ED6] hover:text-white rounded-xl font-medium text-sm transition-colors ${isActive('/categorization') ? 'bg-[#135ED6] text-white' : 'text-slate-300 hover:bg-[#135ED6] hover:text-white'}`}>
             <Element3 size="20" color="white" /> Categorization Rules
           </Link>
-          <Link to="/dashboard/settings" className={`flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-[#135ED6] hover:text-white rounded-xl font-medium text-sm transition-colors ${isActive('/categorization') ? 'bg-[#135ED6] text-white' : 'text-slate-300 hover:bg-[#135ED6] hover:text-white'}`}>
+          <Link to="/dashboard/settings" className={`flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-[#135ED6] hover:text-white rounded-xl font-medium text-sm transition-colors ${isActive('/settings') ? 'bg-[#135ED6] text-white' : 'text-slate-300 hover:bg-[#135ED6] hover:text-white'}`}>
             <Setting2 size="20" color="white" /> Settings
           </Link>
         </nav>

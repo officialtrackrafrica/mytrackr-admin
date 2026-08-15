@@ -1,5 +1,5 @@
 // src/pages/dashboard/DashboardHome.tsx
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Calendar, DocumentDownload, ArrowUp, ArrowDown} from 'iconsax-react';
 import { 
   ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip,
@@ -9,6 +9,26 @@ import { AdminLayout } from '@/components/layout/AdminLayout';
 import { useAdminStats, useFinancialSummary, usePlatformStats, useRegistrationTrends, type PlatformStats } from '@/components/hooks/useAdminStats';
 import { ChurnChart } from '../Subscriptions/components/ChurnChart';
 
+const getDateRange = (filter: string) => {
+  const end = new Date();
+  const start = new Date();
+
+  if (filter === '24 hours') {
+    start.setDate(end.getDate() - 1);
+  } else if (filter === '7 days') {
+    start.setDate(end.getDate() - 7);
+  } else if (filter === '30 days') {
+    start.setDate(end.getDate() - 30);
+  } else if (filter === '12 months') {
+    start.setMonth(end.getMonth() - 12);
+  }
+
+  // Format as YYYY-MM-DD
+  return {
+    startDate: start.toISOString().split('T')[0],
+    endDate: end.toISOString().split('T')[0]
+  };
+};
 
 export const DashboardHome = () => {
   const [activeTimeFilter, setActiveTimeFilter] = useState('12 months');
@@ -20,10 +40,13 @@ export const DashboardHome = () => {
   };
 
   const apiPeriod = apiPeriodMap[activeTimeFilter] || 'month';
-const { data: adminStats, isLoading: isAdminLoading } = useAdminStats();
-  const { data: platformStats, isLoading: isPlatformLoading } = usePlatformStats();
-  const { data: financialData, isLoading: isFinancialLoading } = useFinancialSummary();
-  const { data: registrationData } = useRegistrationTrends(apiPeriod);
+  const dateParams = useMemo(() => getDateRange(activeTimeFilter), [activeTimeFilter]);
+
+  //  Pass the dateParams to the hooks
+  const { data: adminStats, isLoading: isAdminLoading } = useAdminStats(dateParams);
+  const { data: platformStats, isLoading: isPlatformLoading } = usePlatformStats(dateParams);
+  const { data: financialData, isLoading: isFinancialLoading } = useFinancialSummary(dateParams);
+  const { data: registrationData } = useRegistrationTrends(dateParams);
 
   // 2. Map API data to the Metrics Grid (with safe fallbacks)
   const metrics = [
