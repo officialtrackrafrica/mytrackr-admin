@@ -14,6 +14,8 @@ import { FaqCreateEdit } from "./pages/CMS/components/FaqCreateEdit";
 import { SupportFeedback } from "./pages/Support/SupportFeedback";
 import { CategorizationRules } from "./pages/Categorization/CategorizationRules";
 import { Settings } from "./pages/Settings/Settings";
+import { TermsCreateEdit } from "./pages/CMS/components/TermsCreateEdit";
+import { PoliciesCreateEdit } from "./pages/CMS/components/PoliciesCreateEdit";
 
 // 👉 Create the client
 const queryClient = new QueryClient({
@@ -75,6 +77,18 @@ function App() {
 } />
 <Route path="content/faqs/:id" element={
   <ProtectedRoute><FaqCreateEdit /></ProtectedRoute>
+} />
+<Route path="content/terms/new" element={
+  <ProtectedRoute><TermsCreateEdit /></ProtectedRoute>
+} />
+<Route path="content/terms/:id" element={
+  <ProtectedRoute><TermsCreateEdit /></ProtectedRoute>
+} />
+<Route path="content/policies/new" element={
+  <ProtectedRoute><PoliciesCreateEdit /></ProtectedRoute>
+} />
+<Route path="content/policies/:id" element={
+  <ProtectedRoute><PoliciesCreateEdit /></ProtectedRoute>
 } />
 <Route path="support" element={
   <ProtectedRoute><SupportFeedback /></ProtectedRoute>

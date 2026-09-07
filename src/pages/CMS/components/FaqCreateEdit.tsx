@@ -66,7 +66,7 @@ export const FaqCreateEdit = () => {
       <div className="flex flex-col h-full max-w-5xl">
         {/* Breadcrumbs */}
         <div className="flex items-center gap-2 text-xs font-medium text-[#475467] mb-8">
-          <Link to="/dashboard/content" className="hover:text-slate-900">Content management</Link>
+          <Link to="/dashboard/content/faqs" className="hover:text-slate-900">Content management</Link>
           <ArrowRight2 size="12" color="#475467" />
           <Link to="/dashboard/content/faqs" className="hover:text-slate-900">FAQs and Policies</Link>
           <ArrowRight2 size="12" color="#475467" />
