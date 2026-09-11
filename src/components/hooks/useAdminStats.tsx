@@ -88,3 +88,14 @@ export const useFinancialSummary = (params?: DateRangeParams) => {
   });
 };
 
+// Add this to your hooks file
+export const usePlatformRevenue = (params?: { period?: string; startDate?: string; endDate?: string }) => {
+  return useQuery({
+    queryKey: ["platform-revenue", params],
+    queryFn: async () => {
+      const { data } = await api.get("/admin/platform-revenue", { params });
+      return data;
+    },
+  });
+};
+

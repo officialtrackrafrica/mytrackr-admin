@@ -52,7 +52,7 @@ export const SupportFeedback = () => {
       cellClassName: 'pl-4',
       render: () => <input type="checkbox" className="rounded border-slate-300 text-[#0F4BAB] focus:ring-[#0F4BAB]" />
     },
-    { key: 'ticketId', label: 'Ticket ID', cellClassName: 'text-[#475467] text-sm font-medium', render: (item) => item.ticketId || item._id?.substring(0, 8) },
+    { key: 'ticketId', label: 'Ticket ID', cellClassName: 'text-[#475467] text-sm font-medium ', render: (item) => item.id || item._id?.substring(0, 8) },
     {
       key: 'users',
       label: 'Users',

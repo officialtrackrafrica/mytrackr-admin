@@ -89,3 +89,39 @@ export const useTrashMessage = () => {
     },
   });
 };
+
+
+export const useDeleteMessage = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { data } = await api.delete(`/admin/messages/${id}`);
+      return data;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["messages"] }),
+  });
+};
+
+export const useBulkDeleteMessages = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (ids: string[]) => {
+      // Axios requires the body of a DELETE request to be passed in the `data` config property
+      const { data } = await api.delete(`/admin/messages/bulk`, { data: { ids } });
+      return data;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["messages"] }),
+  });
+};
+
+// Optional: If you handle edits via a modal or form submission
+export const useUpdateMessage = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...payload }: { id: string; [key: string]: any }) => {
+      const { data } = await api.patch(`/admin/messages/${id}`, payload);
+      return data;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["messages"] }),
+  });
+};
