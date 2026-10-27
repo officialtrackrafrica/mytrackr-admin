@@ -106,3 +106,17 @@ export const useResetUserPassword = () => {
     },
   });
 };
+
+export const useDeleteUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const response = await api.delete(`/admin/users/${id}`);
+      return response.data;
+    },
+    onSuccess: () => {
+      // Refresh the users list after a successful deletion
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
+};

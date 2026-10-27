@@ -7,7 +7,7 @@ import { PaginationBar } from "@/components/ui/PaginationBar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { DataTable, type ColumnDef } from "@/components/ui/DataTable";
-import { useResetUserPassword, useUpdateUserStatus, useUsers } from "./apis/useUser";
+import { useResetUserPassword, useUpdateUserStatus, useUsers, useDeleteUser } from "./apis/useUser";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { SortFilterModal } from "./components/SortFilterModal";
@@ -20,6 +20,7 @@ export const UserManagement = () => {
 const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
   const [resettingUserId, setResettingUserId] = useState<string | null>(null);
+  const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedSearch(search);
@@ -41,6 +42,7 @@ const [isFilterOpen, setIsFilterOpen] = useState(false);
     const totalUsers = data?.total || 0;
 const { mutate: changeUserStatus } = useUpdateUserStatus();
 const { mutate: resetPassword } = useResetUserPassword();
+const { mutate: deleteUser } = useDeleteUser();
 
   //  3. Create a helper function for the click handler
   const handleStatusChange = (id: string, currentStatus: string) => {
@@ -67,6 +69,24 @@ const { mutate: resetPassword } = useResetUserPassword();
                 setResettingUserId(null);
             }
         });
+    };
+
+    //  3. Create the handler for deleting a user
+    const handleDeleteUser = (id: string) => {
+        if (window.confirm("Are you sure you want to delete this user account? This action cannot be undone.")) {
+            setDeletingUserId(id);
+            deleteUser(id, {
+                onSuccess: () => {
+                    toast.success("User account deleted successfully.");
+                },
+                onError: () => {
+                    toast.error("Failed to delete user account.");
+                },
+                onSettled: () => {
+                    setDeletingUserId(null);
+                }
+            });
+        }
     };
     //  1. Define Columns once
     const columns: ColumnDef<any>[] = [
@@ -157,7 +177,12 @@ const { mutate: resetPassword } = useResetUserPassword();
                 {item.accountStatus === 'suspended' ? 'Activate user account' : 'Suspend user account'}
               </DropdownMenuItem>
                             <DropdownMenuItem>Change plan</DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600">Delete user account</DropdownMenuItem>
+                            <DropdownMenuItem 
+                                    className={`text-red-600 ${deletingUserId ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                                    onClick={() => !deletingUserId && handleDeleteUser(userId)}
+                                >
+                                    {deletingUserId ? 'Deleting...' : 'Delete user account'}
+                                </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

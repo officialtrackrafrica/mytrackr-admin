@@ -91,6 +91,10 @@ export const UserDetails = () => {
       </AdminLayout>
     );
   }
+  // Format the acquisition source for display
+  const displayAcquisitionSource = user.hasSubmittedAcquisitionSource
+    ? (user.acquisitionSourceOther || user.acquisitionSource?.replace(/_/g, ' ') || 'Unknown')
+    : 'Not provided';
 
   return (
     <AdminLayout title="User Management" subtitle="Keep track of user information" headerActions={pageActions}>
@@ -182,7 +186,7 @@ export const UserDetails = () => {
             <div className="space-y-2 relative">
               <Label className="text-slate-600">Email address</Label>
               <div className="relative">
-                <Sms size="18" className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Sms size="18" color="#90a1b9" className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <Input 
                   type="email"
                   value={formData.email} 
@@ -212,6 +216,14 @@ export const UserDetails = () => {
                 />
               </div>
             </div>
+            <div className="space-y-2">
+                <Label className="text-slate-600">Acquisition source</Label>
+                <Input 
+                  value={displayAcquisitionSource} 
+                  disabled 
+                  className="bg-slate-50/80 capitalize"
+                />
+              </div>
             
           </div>
 
