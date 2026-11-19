@@ -67,6 +67,7 @@ import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useMessageDetails, useDeleteMessage } from "../apis/useMessages";
+import { sanitizeHtml, toHtml } from "@/components/lib/richText";
 
 export const MessageDetails = () => {
   const { id } = useParams();
@@ -80,7 +81,7 @@ export const MessageDetails = () => {
   const recipients = Array.isArray(message?.recipients) && message.recipients.length > 0
     ? message.recipients.join(", ") 
     : (message?.recipientGroup?.replace("_", " ") || "All users");
-  const body = message?.body || "Loading content...";
+  const body = message?.bodyHtml || message?.body || "Loading content...";
 
   const handleDelete = () => {
     if (!id) return;
@@ -149,9 +150,14 @@ export const MessageDetails = () => {
             </div>
           </div>
 
-          <div className="prose prose-sm max-w-none text-[#475467] whitespace-pre-wrap">
-            {isLoading ? "Loading message content..." : body}
-          </div>
+          {isLoading ? (
+            <div className="text-sm text-[#475467]">Loading message content...</div>
+          ) : (
+            <div
+              className="rich-text text-sm text-[#475467]"
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(toHtml(body)) }}
+            />
+          )}
         </div>
       </div>
     </AdminLayout>

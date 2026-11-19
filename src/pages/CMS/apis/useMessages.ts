@@ -3,12 +3,19 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 // Types
 // 👉 Updated to match image_0458e6.png
+// Same shape for compose (POST /admin/messages/compose), drafts
+// (POST /admin/messages/drafts, PATCH /admin/messages/drafts/:id) and
+// updates (PATCH /admin/messages/:id).
 export interface ComposeMessagePayload {
+  attachment?: string;
   channel: 'email' | 'push';
   recipientGroup: 'all_users' | 'active_users' | 'inactive_users' | 'subscribers' | 'custom' | string;
   recipients?: string[];
   subject: string;
+  /** Plain-text version of the message (fallback for clients that can't show HTML). */
   body: string;
+  /** Rich text from the editor. */
+  bodyHtml?: string;
   templateId?: string;
   saveAsTemplate?: boolean;
   templateName?: string;
@@ -62,9 +69,10 @@ export const useComposeMessage = () => {
 export const useSaveDraft = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (data: Partial<ComposeMessagePayload> & { id?: string }) => {
-      if (data.id) {
-        const response = await api.patch(`/admin/messages/drafts/${data.id}`, data);
+    mutationFn: async ({ id, ...data }: Partial<ComposeMessagePayload> & { id?: string }) => {
+      if (id) {
+        // id goes in the URL only, not the body
+        const response = await api.patch(`/admin/messages/drafts/${id}`, data);
         return response.data;
       }
       const response = await api.post("/admin/messages/drafts", data);
@@ -118,7 +126,7 @@ export const useBulkDeleteMessages = () => {
 export const useUpdateMessage = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...payload }: { id: string; [key: string]: any }) => {
+    mutationFn: async ({ id, ...payload }: Partial<ComposeMessagePayload> & { id: string }) => {
       const { data } = await api.patch(`/admin/messages/${id}`, payload);
       return data;
     },

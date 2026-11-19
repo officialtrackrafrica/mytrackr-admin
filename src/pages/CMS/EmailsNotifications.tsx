@@ -223,6 +223,7 @@ import { Input } from "@/components/ui/input";
 import { SearchNormal, Add, Trash, Edit2 } from "iconsax-react";
 import { useMessages, useDeleteMessage, useBulkDeleteMessages, type GetMessagesParams } from "./apis/useMessages";
 import { toast } from "sonner";
+import { htmlToPlainText } from "@/components/lib/richText";
 import { Link, useNavigate } from "react-router-dom";
 
 export const EmailsNotifications = () => {
@@ -411,7 +412,7 @@ export const EmailsNotifications = () => {
     : item.recipientGroup?.replace("_", " ") || "Unknown group"}
 </p>
                       <h4 className="text-sm font-bold text-slate-900">{item.subject || "No Subject"}</h4>
-                      <p className="text-xs text-[#475467] line-clamp-1 max-w-2xl">{item.body || "No preview available..."}</p>
+                      <p className="text-xs text-[#475467] line-clamp-1 max-w-2xl">{htmlToPlainText(item.bodyHtml || item.body) || "No preview available..."}</p>
                     </div>
                   </div>
                   
